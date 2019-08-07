@@ -1,0 +1,51 @@
+html, body, h1, form, fieldset, legend, ol, li {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: #ffffff;
+  color: black;
+  font-family: Courier, "Courier New", monospace;
+  font-size: 12px;
+  padding: 20px;
+  margin: 0 auto;
+  /*width:615px;*/
+}
+h1 {
+  margin: 5px auto;
+}
+h3 {
+  margin: 10px auto 30px auto;
+}
+.buttonlink{
+  border-radius: 2px;
+  color: white;
+  background-color: #969696;
+  padding: 6px 20px;
+  margin-right: 3px;
+  text-align: center;
+  font-size: 15px;
+  font-family: Courier, "Courier New", monospace;
+  border: 0;
+  text-decoration:none;
+}
+.buttonlink:hover {
+  cursor: pointer;
+  }
+
+#addemployee{
+  padding: 6px 34px;
+}
+#addemployee:hover{
+  background-color: #5aae61;
+}
+#searchemployee:hover{
+  background-color: #3288bd;
+}
+#updateemployee:hover{
+  background-color: #8073ac;
+}
+#deleteemployee:hover{
+  background-color: #d53e4f;
+    opacity:.9;
+}

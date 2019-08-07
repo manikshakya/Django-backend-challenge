@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+
+	<head>
+		<title>Add Employee</title>
+		<meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		{% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'learning/book_form.css' %}">
+
+	</head>
+
+	<body>
+
+	<a href="/learning">Home</a>
+    <h1>Add Vocabulary</h1>
+
+        <form method="post">
+          {% csrf_token %}
+          <p><input type="text" name="bookName" placeholder="Book Title"></p>
+          <p><input type="text" name="word" placeholder="Enter the Word"></p>
+          <p><input type="text" name="description" placeholder="Enter the Description"></p>
+
+          <p> <button class="search_employee" name = "submit" type="submit">Add Book</button> </p>
+        </form>
+
+        {% if errorMessage == True %}
+            <h2>Vocabulary has been added Successfully.</h2>
+            <table>
+                <tr>
+                    <th>Title</th>
+                    <th>Word</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>{{ books.name }}</td>
+                    <td>{{ books.word }}</td>
+                    <td>{{ books.description }}</td>
+                </tr>
+            </table>
+        {% else %}
+            {% if errorMessage is not None %}
+                <h2>{{ errorMessage }}</h2>
+            {% endif %}
+        {% endif %}
+
+
+  	</body>
+
+</html>
