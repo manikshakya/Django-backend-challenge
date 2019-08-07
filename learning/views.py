@@ -1,4 +1,8 @@
 from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import BookSerializer, VocabularySerializer
 
 from .models import (Book, Vocabulary)
 
@@ -22,7 +26,7 @@ def addBook(request):
         '''
             Check if the none of the fields are empty
         '''
-        if name != '' and ISBN != '' and author != '':
+        if name != '' and len(str(name)) > 3 and ISBN != '' and author != '':
             '''
                 Check if the book is in the database
             '''
@@ -46,13 +50,12 @@ def addBook(request):
                 except AssertionError:
                     errorMessage = 'The Book is already in the database.'
         else:
-            errorMessage = 'Please fill all the details'
+            if(len(str(name)) < 3):
+                errorMessage = 'Book title should be of atleast 4 characters.'
+            else:
+                errorMessage = 'Please fill all the details'
 
     return render(request, "learning/add_book.html", {'books': books, 'errorMessage': errorMessage})
-
-
-def searchBook(request):
-    return render(request, "learning/search_book.html")
 
 
 def addVocabulary(request):
@@ -101,5 +104,62 @@ def addVocabulary(request):
 
     return render(request, "learning/add_vocabulary.html", {'books': books, 'errorMessage': errorMessage})
 
+
+def searchBook(request):
+    return render(request, "learning/search_book.html")
+
+
 def searchVocabulary(request):
     return render(request, "learning/search_vocabulary.html")
+
+
+class Json1(APIView):
+    def post(self, request):
+        name = request.POST['bookName']
+        ISBN = request.POST['ISBN']
+        errorMessage = False
+
+        if name != '' or ISBN != '':
+            try:
+                if name != '':
+                    book = Book.objects.filter(title=str(name).lower())
+                elif ISBN != '':
+                    book = Book.objects.filter(ISBN=str(ISBN))
+
+                serializer = BookSerializer(book)
+
+                return Response(serializer.data)
+            except:
+                errorMessage = 'Book not found'
+                return render(request, "learning/search_book.html", {'errorMessage': errorMessage})
+        else:
+            errorMessage = True
+            return render(request, "learning/search_book.html", {'errorMessage': errorMessage})
+
+
+class Json2(APIView):
+    def post(self, request):
+        name = request.POST['bookName']
+        word = request.POST['word']
+
+        errorMessage = False
+
+        if name != '' and word != '':
+            try:
+                book = Book.objects.get(title=str(name).lower())
+
+                try:
+                    data = Vocabulary.objects.get(ISBN=book, words=str(word).lower())
+                    serializer = VocabularySerializer(data)
+
+                    return Response(serializer.data)
+                except:
+                    errorMessage = "Word not found."
+            except:
+                errorMessage = "Book not found."
+
+            return render(request, "learning/search_vocabulary.html", {'errorMessage': errorMessage})
+        else:
+            errorMessage = True
+
+            return render(request, "learning/search_vocabulary.html", {'errorMessage': errorMessage})

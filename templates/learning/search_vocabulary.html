@@ -8,13 +8,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 		{% load staticfiles %}
-        <link rel="stylesheet" type="text/css" href="{% static 'learning/main.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'learning/book_form.css' %}">
 
 	</head>
 
 	<body>
 
-		<h1>Add book</h1>
+		<a href="/learning">Home</a>
+		<h1>Search Vocabulary</h1>
+        <form method="post" action="/learning/searchVocabulary/json2/">
+          {% csrf_token %}
+          <p><input type="text" name="bookName" placeholder="Book Title"></p>
+          <p><input type="text" name="word" placeholder="Enter Word"></p>
+
+          <p> <button class="search_employee" name = "submit" type="submit">Add Book</button> </p>
+        </form>
+
+        {% if errorMessage == True %}
+            <h2>Please fill all the details.</h2>
+        {% else %}
+            <h2>{{ errorMessage }}</h2>
+        {% endif %}
 
   	</body>
 
